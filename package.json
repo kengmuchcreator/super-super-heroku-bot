@@ -1,13 +1,20 @@
 {
-  "name": "ReallyHappy",
-  "description": "Report",
-  "version": "0.0.0",
-  "main": "bot.js",
+  "name": "botkak2019file",
+  "version": "1.0.0",
+  "description": "บอทหัวดอ",
+  "main": "index.js",
   "scripts": {
-    "start": "node bot.js"
+    "test": "kuy"
   },
-  "dependencies":{
-    "discord.js": "11.1.0",
-	"request": "2.81.0"
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^2.5.0",
+    "discord.js": "^11.5.1",
+    "ffmpeg-binaries": "^4.0.0",
+    "opusscript": "0.0.6",
+    "simple-youtube-api": "^5.2.0",
+    "webhook-discord": "^3.2.0",
+    "ytdl-core": "^0.29.2"
   }
 }
