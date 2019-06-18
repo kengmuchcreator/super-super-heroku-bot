@@ -9,10 +9,10 @@ bot.on('ready', () => {
 });
 
 
-bot.login('NTY4Mjg2OTQ3MDM4OTg2MjQw.XQS5Eg.h98CwE5LP_VFHWq6lIbnshsfd7w');
+bot.login('NTU4ODk2NzQzMDk4NjEzNzYx.XQeXhw.reSnAFk5D7LAa0HpRy3eS8AK7ew');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
-const youtube = new YouTube("AIzaSyApeJQXTQtAWPzr1GvV2wnCyYORdueJwfk");
+const youtube = new YouTube("AIzaSyC9bUkt93L2nrq1aurjm26BAFTJCsBOIbg");
 const queue = new Map();
 var servers = {};
 
@@ -41,7 +41,12 @@ if (args[0] == `${prefix}เปิดเพลง`||args[0]==`${prefix}play`||ar
 				var video2 = await youtube.getVideoByID(video.id); // eslint-disable-line no-await-in-loop
 				await handleVideo(video2, message, voiceChannel, true); // eslint-disable-line no-await-in-loop
 			}
-			return message.channel.send(`✅ เพลย์ลิส : **${playlist.title}** ถูกเพิ่มในคิว!`);
+			let embed = new Discord.RichEmbed()
+            .setAuthor("ระบบเพลง")
+			.setTitle(`✅ เพลย์ลิส : **${playlist.title}** ถูกเพิ่มในคิว!`)
+			.setFooter(`ใช้คำสั่งโดย ${message.member.displayName}`, `${message.author.displayAvatarURL}`) //FOOTER AND ICON
+            .setColor("#FF1800");
+			message.channel.send(embed);
 		} else {
 			try {
 				var video = await youtube.getVideo(url);
@@ -70,35 +75,83 @@ if (args[0]==`${prefix}เปลี่ยนเพลง`||args[0]==`${prefix}sk
 		if(!message.member.voiceChannel) return message.channel.send('คุณไม่ได้อยู่ในห้องคุย!');
 		if(!serverQueue) return message.channel.send('ไม่มีเพลงที่เล่นอยู่');
 		serverQueue.songs = [];
-		serverQueue.connection.dispatcher.end('ปิดเพลงแล้ว');
+		let embed = new Discord.RichEmbed()
+            .setAuthor("ระบบเพลง")
+			.setTitle(`ปิดเพลงแล้ว`)
+			.setFooter(`ใช้คำสั่งโดย ${message.member.displayName}`, `${message.author.displayAvatarURL}`) //FOOTER AND ICON
+            .setColor("#FF1800");
+		serverQueue.connection.dispatcher.end(embed);
 		return undefined;
 	  }		
 	  if(args[0]==`${prefix}วน`||args[0]==`${prefix}loop`){
 		  if(!loop){
-	message.channel.send(':repeat_one: **เปิด!**');
+			  
+			  let embed = new Discord.RichEmbed()
+            .setAuthor("เปิดเพลงวน")
+			.setTitle(`:repeat_one: **เปิด!**`)
+			.setFooter(`ใช้คำสั่งโดย ${message.member.displayName}`, `${message.author.displayAvatarURL}`) //FOOTER AND ICON
+            .setColor("#FF1800");
+			message.channel.send(embed);
 		  loop = true;
-		  }else{ 
-		  message.channel.send(':repeat_one: **ปิด!**');
+		  }else{
+			  
+			  let embed = new Discord.RichEmbed()
+            .setAuthor("เปิดเพลงวน")
+			.setTitle(`:repeat_one: **ปิด!**`)
+			.setFooter(`ใช้คำสั่งโดย ${message.member.displayName}`, `${message.author.displayAvatarURL}`) //FOOTER AND ICON
+            .setColor("#FF1800");
+			message.channel.send(embed);
+
 		  loop = false;
 		  }
 		return undefined;
 	  }
-		if(args[0]==`${prefix}เจ็บคอ`||args[0]==`${prefix}volume`||args[0]==`${prefix}v`){
+	  
+	  
+	  if(args[0]==`${prefix}เสียง`||args[0]==`${prefix}volume`||args[0]==`${prefix}v`){
 		if (!message.member.voiceChannel) return message.channel.send('คุณไม่ได้อยู่ในห้องคุย!');
 		if (!serverQueue) return message.channel.send('ไม่มีเพลงที่เล่นอยู่');
-		if (!args[1]) return message.channel.send(`ระดับความเจ็บคอ **${serverQueue.volume}**`);
+		if (!args[1]) return message.channel.send(`ระดับเสียงในตอนนี้คือ **${serverQueue.volume}**`);
 		serverQueue.volume = args[1];
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 5);
-		return message.channel.send(`ระดับความเจ็บคอ **${args[1]}** `);
+		return message.channel.send(`หนูปรับเสียงเป็น **${args[1]}** แล้ว`);
 		}
+	  
+	  
+	  if(args[0]==`${prefix}help`||args[0]==`${prefix}ช่วย`){
+			  let embed = new Discord.RichEmbed()
+            .setAuthor("คำสั้งบอททั้งหมด")
+			.setTitle(`:repeat_one: **เปิด!**`)
+			.addField(":musical_note: ?เปิดเพลง , ?play ,?p", "ใส่ลิ้งหรือใส่เพลงหลังคำสั่งเช่น __**?p ลุงเริงแดนซ์**__", true)
+			.addField(":mag_right: ?คิว , ?queue ,?q", "ดูเพลงทั้งหมดที่เปิด", true)
+			.addField("⏸ ?หยุด , ?pause ,?pa", "หยุดเพลง", true)
+			.addField("▶ ?ต่อ , ?resume ,?re", "เปิดเพลงต่อ", true)
+			.addField(":repeat_one: ?วน , ?loop", "เปิดเพลงวน ,ปิดเพลงวน", true)
+			.addField(":notes: ?เปลี่ยนเพลง , ?skip ,?s", "เปลี่ยนเพลง", true)
+			.setTimestamp()
+			.setFooter(`ช่วยเหลือ ${message.member.displayName}`, `${message.author.displayAvatarURL}`) //FOOTER AND ICON
+			.setThumbnail("https://i.imgur.com/0RaqBK2.jpg")
+			.setImage("https://media.giphy.com/media/5AwCyyo8ZS9vl533IgU/giphy.gif")
+            .setColor("#FF1800");
+			message.channel.send(embed);
+
+	  }
+	  
+
+		
+		
       if(args[0]==`${prefix}คิว`||args[0]==`${prefix}queue`||args[0]==`${prefix}q`){
 		if (!serverQueue) return message.channel.send('ไม่มีเพลงที่เล่นอยู่');
-		return message.channel.send(`
-__**Song queue:**__
-${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
-**ตอนนี้เล่นเพลง :** ${serverQueue.songs[0].title}
-		`);
-	  }
+		
+		
+		
+		let embed = new Discord.RichEmbed()
+            .setTitle("Song queue")
+            .addField(`${serverQueue.songs.map(song => `**-** ${song.title}`).join(`\n`)}`, `Now playing: ${serverQueue.songs[0].title}`)
+            .setTimestamp()
+            .setColor("#FF1800");
+        return message.channel.send(embed);
+      }
 if(args[0]==`${prefix}หยุด`||args[0]==`${prefix}pause`||args[0]==`${prefix}pa`){
 		if (serverQueue && serverQueue.playing) {
 			serverQueue.playing = false;
@@ -152,7 +205,12 @@ async function handleVideo(video, message, voiceChannel, playlist = false) {
 		serverQueue.songs.push(song);
 		console.log(serverQueue.songs);
 		if (playlist) return undefined;
-		else return message.channel.send(`✅ **${song.title}** ถูกเพิ่มในคิว!`);
+            let embed = new Discord.RichEmbed()
+            .setAuthor("เพิ่มเพลง")
+			.setTitle(`:notes: __**${song.title}**__ เพิ่มในคิวแล้วจ้าาา`)
+			.setFooter(`ใช้คำสั่งโดย ${message.member.displayName}`, `${message.author.displayAvatarURL}`) //FOOTER AND ICON
+            .setColor("#FF1800");
+		message.channel.send(embed);
 	
 	}
 	return undefined;
@@ -167,9 +225,12 @@ async function handleVideo(video, message, voiceChannel, playlist = false) {
 	}
 	console.log(serverQueue.songs);
 
-	const dispatcher = serverQueue.connection.playStream(ytdl(song.url), {quality: 'highestaudio'})
-		.on('end', reason => {
-      message.channel.send('``The queue of song is end.``');
+	const dispatcher = serverQueue.connection.playStream(ytdl(song.url), {filter:"audioonly",quality: 'highestaudio',bitrate: 192000})
+	.on('end', reason => {
+            let embed = new Discord.RichEmbed()
+            .setAuthor("⏸️ เพลงได้จบลงแล้วครับ")
+            .setColor("#FF1800");
+      message.channel.send(embed);
 			if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
 			else console.log(reason);
 			if(!loop){
@@ -185,21 +246,14 @@ async function handleVideo(video, message, voiceChannel, playlist = false) {
     .setTitle(`:notes: __**${song.title}**__`)
     .setURL(`${song.url}`)
     .setFooter(`ขอเพลงนี้โดย ${message.member.displayName}`, `${message.author.displayAvatarURL}`) //FOOTER AND ICON
+	.setThumbnail("https://www.freepnglogos.com/uploads/music-logo-round-play-png-29.png")
     .setTimestamp()
     .setColor("#FF1800");
     serverQueue.textChannel.send(embed);
 	
 }
 });
-function mysqllog(text, color) {
-	console.log("mysql>".blue,text);
-	return
-}
+
 function wrap(text) {
 	return '\n' + text.replace(/`/g, '`' + String.fromCharCode(8203)) + '\n';
-}
-const numberWithCommas = (x) => {
-  var parts = x.toString().split(".");
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  return parts.join(".");
 }
